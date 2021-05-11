@@ -1,11 +1,11 @@
-import React, {useContext, useState} from 'react';
-import {Link, NavLink} from 'react-router-dom';
-import {Container, Nav, Navbar, NavbarBrand} from 'react-bootstrap'
-import {routes} from 'constants/routes'
-import 'components/layout/header/navigation/Navigation.scss'
-import AppContext from 'context/app';
-import UserLogout from 'components/user/logout/Logout';
-import companyNameLogo from 'assets/images/icons/company-name.png';
+import React, { useContext, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { Container, Nav, Navbar, NavbarBrand } from "react-bootstrap";
+import { routes } from "constants/routes";
+import "components/layout/header/navigation/Navigation.scss";
+import AppContext from "context/app";
+import UserLogout from "components/user/logout/Logout";
+import companyNameLogo from "assets/images/icons/company-name.png";
 
 /**
  * Stateful component responsible for rendering the top navigation of this application.
@@ -15,37 +15,38 @@ import companyNameLogo from 'assets/images/icons/company-name.png';
  * */
 const LayoutHeaderNavigation = () => {
   const [showNavbar, setShowNavbar] = useState<boolean>(false);
-  const {appState} = useContext(AppContext)
+  const { appState } = useContext(AppContext);
 
   // In order to fix the "findDOMNode" warning in the navbar collapse component,
   // a custom toggle control function was implemented. Currently, some bootstrap components
   // are not up-to-date with React standards, and this is considered a quick-fix until
   // bootstrap components are updated.
   return (
-    <Navbar expand="lg"
-            onToggle={() => setShowNavbar(!showNavbar)}
-            expanded={false}
-            className='bg-orange'
-            variant="dark"
+    <Navbar
+      expand="lg"
+      onToggle={() => setShowNavbar(!showNavbar)}
+      expanded={false}
+      className="bg-orange"
+      variant="dark"
     >
       <Container>
         <NavbarBrand>
           <Link to={routes.ROOT}>
-            <img src={companyNameLogo} className='logo-name' alt='logo-name'/>
+            <img src={companyNameLogo} className="logo-name" alt="logo-name" />
           </Link>
         </NavbarBrand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse className={showNavbar ? 'show' : ''}>
+        <Navbar.Collapse className={showNavbar ? "show" : ""}>
           <Nav className="justify-content-end navbar-nav">
             {appState.isAuthenticated && (
               <>
                 <Nav.Item>
-                  <Nav.Link as={'span'} className='user-logout'>
+                  <Nav.Link as={"span"} className="user-logout">
                     <UserLogout />
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link as={'span'}>
+                  <Nav.Link as={"span"}>
                     <span>| Hello, {appState.username}</span>
                   </Nav.Link>
                 </Nav.Item>
@@ -55,10 +56,22 @@ const LayoutHeaderNavigation = () => {
             {!appState.isAuthenticated && (
               <>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.APPLICANT_LOGIN}>Register for Crowdfunding Credentials</Nav.Link>
+                  <Nav.Link
+                    as={NavLink}
+                    activeClassName="is-active"
+                    to={routes.APPLICANT_LOGIN}
+                  >
+                    Register for Crowdfunding Credentials
+                  </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.ISSUER_LOGIN}>Login as Admin</Nav.Link>
+                  <Nav.Link
+                    as={NavLink}
+                    activeClassName="is-active"
+                    to={routes.ISSUER_LOGIN}
+                  >
+                    Login as Admin
+                  </Nav.Link>
                 </Nav.Item>
                 {/* <Nav.Item>
                   <Nav.Link as={NavLink} activeClassName='is-active' to={routes.API_KEY}>API Key</Nav.Link>
@@ -69,7 +82,7 @@ const LayoutHeaderNavigation = () => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  )
-}
+  );
+};
 
-export default LayoutHeaderNavigation
+export default LayoutHeaderNavigation;

@@ -1,1 +1,1 @@
-module.exports = require('@affinidi/prettier-config')
+module.exports = require("@affinidi/prettier-config");

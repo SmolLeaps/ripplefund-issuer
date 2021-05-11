@@ -1,183 +1,230 @@
-import {cloudWalletApi, issuerApi, verifierApi} from 'utils/api';
-import {endpoints} from 'constants/endpoints';
-import ApiService from 'utils/apiService';
-import {drivingLicenseVCData, signedDrivingLicenseVC, unsignedDrivingLicenseVC} from 'utils/vc-data-examples/drivinglicense';
+import { cloudWalletApi, issuerApi, verifierApi } from "utils/api";
+import { endpoints } from "constants/endpoints";
+import ApiService from "utils/apiService";
+import {
+  drivingLicenseVCData,
+  signedDrivingLicenseVC,
+  unsignedDrivingLicenseVC,
+} from "utils/vc-data-examples/drivinglicense";
 
-let mockCloudWalletApiPost: jest.SpyInstance
-let mockCloudWalletApiGet: jest.SpyInstance
-let mockCloudWalletApiDelete: jest.SpyInstance
-let mockIssuerApiPost: jest.SpyInstance
-let mockVerifierApiPost: jest.SpyInstance
+let mockCloudWalletApiPost: jest.SpyInstance;
+let mockCloudWalletApiGet: jest.SpyInstance;
+let mockCloudWalletApiDelete: jest.SpyInstance;
+let mockIssuerApiPost: jest.SpyInstance;
+let mockVerifierApiPost: jest.SpyInstance;
 
 beforeEach(() => {
-  mockCloudWalletApiPost = jest.spyOn(cloudWalletApi, 'post');
-  mockCloudWalletApiGet = jest.spyOn(cloudWalletApi, 'get');
-  mockCloudWalletApiDelete = jest.spyOn(cloudWalletApi, 'delete');
-  mockIssuerApiPost = jest.spyOn(issuerApi, 'post');
-  mockVerifierApiPost = jest.spyOn(verifierApi, 'post');
+  mockCloudWalletApiPost = jest.spyOn(cloudWalletApi, "post");
+  mockCloudWalletApiGet = jest.spyOn(cloudWalletApi, "get");
+  mockCloudWalletApiDelete = jest.spyOn(cloudWalletApi, "delete");
+  mockIssuerApiPost = jest.spyOn(issuerApi, "post");
+  mockVerifierApiPost = jest.spyOn(verifierApi, "post");
 });
 
-describe('ApiService methods', () => {
-  const username = 'test';
-  const password = 'test';
-  const accessToken = 'accessToken';
-  const did = 'did';
+describe("ApiService methods", () => {
+  const username = "test";
+  const password = "test";
+  const accessToken = "accessToken";
+  const did = "did";
 
-  test('signUp method', async () => {
-    mockCloudWalletApiPost.mockImplementation(() => Promise.resolve({
-      accessToken,
-      did
-    }));
+  test("signUp method", async () => {
+    mockCloudWalletApiPost.mockImplementation(() =>
+      Promise.resolve({
+        accessToken,
+        did,
+      })
+    );
 
-    await ApiService.signUp(username,password)
+    await ApiService.signUp(username, password);
 
-    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.SIGNUP, {username, password})
-  })
+    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.SIGNUP, {
+      username,
+      password,
+    });
+  });
 
-  test('logIn method', async () => {
-    mockCloudWalletApiPost.mockImplementation(() => Promise.resolve({
-      accessToken,
-      did
-    }));
+  test("logIn method", async () => {
+    mockCloudWalletApiPost.mockImplementation(() =>
+      Promise.resolve({
+        accessToken,
+        did,
+      })
+    );
 
-    await ApiService.logIn(username,password)
+    await ApiService.logIn(username, password);
 
-    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.LOGIN, {username, password})
-  })
+    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.LOGIN, {
+      username,
+      password,
+    });
+  });
 
-  test('logout method', async () => {
+  test("logout method", async () => {
     mockCloudWalletApiPost.mockImplementation(() => Promise.resolve());
 
-    await ApiService.logout()
+    await ApiService.logout();
 
-    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.LOGOUT)
-  })
+    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.LOGOUT);
+  });
 
-  test('issueUnsignedVC method', async () => {
-    const example = {...drivingLicenseVCData}
-    example.holderDid = '';
+  test("issueUnsignedVC method", async () => {
+    const example = { ...drivingLicenseVCData };
+    example.holderDid = "";
 
-    mockIssuerApiPost.mockImplementation(() => Promise.resolve({
-      unsignedVC: unsignedDrivingLicenseVC
-    }));
+    mockIssuerApiPost.mockImplementation(() =>
+      Promise.resolve({
+        unsignedVC: unsignedDrivingLicenseVC,
+      })
+    );
 
-    await ApiService.issueUnsignedVC(drivingLicenseVCData)
+    await ApiService.issueUnsignedVC(drivingLicenseVCData);
 
-    expect(mockIssuerApiPost).toHaveBeenCalledWith(endpoints.VC_BUILD_UNSIGNED, example)
-  })
+    expect(mockIssuerApiPost).toHaveBeenCalledWith(
+      endpoints.VC_BUILD_UNSIGNED,
+      example
+    );
+  });
 
-  test('signVC method', async () => {
-    mockCloudWalletApiPost.mockImplementation(() => Promise.resolve({
-      unsignedVC: unsignedDrivingLicenseVC
-    }));
-
-    const input = {
-      unsignedCredential: unsignedDrivingLicenseVC
-    }
-
-    await ApiService.signVC(input)
-
-    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.WALLET_SIGN_CREDENTIALS, input)
-  })
-
-  test('storeSignedVCs method', async () => {
-    mockCloudWalletApiPost.mockImplementation(() => Promise.resolve({
-      errors: [],
-      isValid: true
-    }));
+  test("signVC method", async () => {
+    mockCloudWalletApiPost.mockImplementation(() =>
+      Promise.resolve({
+        unsignedVC: unsignedDrivingLicenseVC,
+      })
+    );
 
     const input = {
-      data: [signedDrivingLicenseVC]
-    }
+      unsignedCredential: unsignedDrivingLicenseVC,
+    };
 
-    await ApiService.storeSignedVCs(input)
+    await ApiService.signVC(input);
 
-    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(endpoints.WALLET_CREDENTIALS, input)
-  })
+    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(
+      endpoints.WALLET_SIGN_CREDENTIALS,
+      input
+    );
+  });
 
-  test('getSavedVCs method', async () => {
+  test("storeSignedVCs method", async () => {
+    mockCloudWalletApiPost.mockImplementation(() =>
+      Promise.resolve({
+        errors: [],
+        isValid: true,
+      })
+    );
+
+    const input = {
+      data: [signedDrivingLicenseVC],
+    };
+
+    await ApiService.storeSignedVCs(input);
+
+    expect(mockCloudWalletApiPost).toHaveBeenCalledWith(
+      endpoints.WALLET_CREDENTIALS,
+      input
+    );
+  });
+
+  test("getSavedVCs method", async () => {
     mockCloudWalletApiGet.mockImplementation(() => [signedDrivingLicenseVC]);
 
     await ApiService.getSavedVCs();
 
-    expect(mockCloudWalletApiGet).toHaveBeenCalledWith(endpoints.WALLET_CREDENTIALS)
-    expect(mockCloudWalletApiGet.mock.results[0].value).toStrictEqual([signedDrivingLicenseVC])
-  })
+    expect(mockCloudWalletApiGet).toHaveBeenCalledWith(
+      endpoints.WALLET_CREDENTIALS
+    );
+    expect(mockCloudWalletApiGet.mock.results[0].value).toStrictEqual([
+      signedDrivingLicenseVC,
+    ]);
+  });
 
-  test('deleteStoredVC method', async () => {
+  test("deleteStoredVC method", async () => {
     mockCloudWalletApiDelete.mockImplementation(() => Promise.resolve());
-    const vcId = '1';
+    const vcId = "1";
 
     await ApiService.deleteStoredVC(vcId);
 
-    expect(mockCloudWalletApiDelete).toHaveBeenCalledWith(`${endpoints.WALLET_CREDENTIALS}/${vcId}`)
-  })
+    expect(mockCloudWalletApiDelete).toHaveBeenCalledWith(
+      `${endpoints.WALLET_CREDENTIALS}/${vcId}`
+    );
+  });
 
-  test('saveAccessTokenToLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'setItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("saveAccessTokenToLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "setItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.saveAccessTokenToLocalStorage(accessToken)
+    ApiService.saveAccessTokenToLocalStorage(accessToken);
 
-    expect(console.error).toHaveBeenCalled()
-  })
+    expect(console.error).toHaveBeenCalled();
+  });
 
-  test('getAccessTokenFromLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'getItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("getAccessTokenFromLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "getItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.getAccessTokenFromLocalStorage()
+    ApiService.getAccessTokenFromLocalStorage();
 
-    expect(console.error).toHaveBeenCalled()
-  })
+    expect(console.error).toHaveBeenCalled();
+  });
 
-  test('removeAccessTokenFromLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'removeItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("removeAccessTokenFromLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "removeItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.removeAccessTokenFromLocalStorage()
+    ApiService.removeAccessTokenFromLocalStorage();
 
-    expect(console.error).toHaveBeenCalled()
-  })
+    expect(console.error).toHaveBeenCalled();
+  });
 
-  test('saveDidTokenToLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'setItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("saveDidTokenToLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "setItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.saveDidTokenToLocalStorage('test')
+    ApiService.saveDidTokenToLocalStorage("test");
 
-    expect(console.error).toHaveBeenCalled()
-  })
+    expect(console.error).toHaveBeenCalled();
+  });
 
-  test('getDidTokenToLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'getItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("getDidTokenToLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "getItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.getDidTokenToLocalStorage()
+    ApiService.getDidTokenToLocalStorage();
 
-    expect(console.error).toHaveBeenCalled()
-  })
+    expect(console.error).toHaveBeenCalled();
+  });
 
-  test('removeDidTokenFromLocalStorage method', async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    jest.spyOn(global.localStorage.__proto__, 'removeItem').mockImplementation(() => {
-      throw new Error('No reason')
-    })
+  test("removeDidTokenFromLocalStorage method", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest
+      .spyOn(global.localStorage.__proto__, "removeItem")
+      .mockImplementation(() => {
+        throw new Error("No reason");
+      });
 
-    ApiService.removeDidTokenFromLocalStorage()
+    ApiService.removeDidTokenFromLocalStorage();
 
-    expect(console.error).toHaveBeenCalled()
-  })
-})
+    expect(console.error).toHaveBeenCalled();
+  });
+});
 
-export {}
+export {};

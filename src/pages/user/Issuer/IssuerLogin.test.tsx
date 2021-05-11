@@ -5,7 +5,7 @@ import IssuerLoginPage from "pages/user/Issuer/IssuerLogin.tsx";
 describe("User Page test", () => {
   test("Page renders with login", () => {
     const { container } = render(<IssuerLoginPage />);
-    
+
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div
         class="page-form page-form--slim"

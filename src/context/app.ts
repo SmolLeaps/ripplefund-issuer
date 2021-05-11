@@ -1,15 +1,15 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React, { Dispatch, SetStateAction } from "react";
 
 export interface AppContextState {
-  accessToken: null | string,
-  didToken: null | string,
-  isAuthenticated: boolean,
-  username: null | string,
+  accessToken: null | string;
+  didToken: null | string;
+  isAuthenticated: boolean;
+  username: null | string;
 }
 
 export interface AppContextProperties {
-  appState: AppContextState,
-  setAppState: Dispatch<SetStateAction<AppContextState>>
+  appState: AppContextState;
+  setAppState: Dispatch<SetStateAction<AppContextState>>;
 }
 
 /**
@@ -22,12 +22,14 @@ export const appContextDefaultValue: AppContextProperties = {
     accessToken: null,
     didToken: null,
     isAuthenticated: false,
-    username: null
+    username: null,
   },
-  setAppState: state => {}
-}
+  setAppState: (state) => {},
+};
 
 // expose app context
-const AppContext = React.createContext<AppContextProperties>(appContextDefaultValue);
+const AppContext = React.createContext<AppContextProperties>(
+  appContextDefaultValue
+);
 
-export default AppContext
+export default AppContext;

@@ -1,73 +1,73 @@
 export interface FreeFormObject {}
 
 export interface VCBuildUnsignedInput {
-  type: string,
-  data: FreeFormObject,
-  holderDid: string
+  type: string;
+  data: FreeFormObject;
+  holderDid: string;
 }
 
 export interface UnsignedW3cCredential {
-  '@context': FreeFormObject,
-  id: string,
-  type: string[],
-  holder: FreeFormObject,
-  credentialSubject: FreeFormObject,
-  issuanceDate: string,
-  expirationDate?: string,
+  "@context": FreeFormObject;
+  id: string;
+  type: string[];
+  holder: FreeFormObject;
+  credentialSubject: FreeFormObject;
+  issuanceDate: string;
+  expirationDate?: string;
 }
 
 export interface VCBuildUnsignedOutput {
-  unsignedVC: UnsignedW3cCredential,
+  unsignedVC: UnsignedW3cCredential;
 }
 
 export interface SignCredentialInput {
-  unsignedCredential: UnsignedW3cCredential,
+  unsignedCredential: UnsignedW3cCredential;
 }
 
 export interface VerifyCredentialOutput {
-  errors: string[],
-  isValid: boolean,
+  errors: string[];
+  isValid: boolean;
 }
 
 export interface SignCredentialOutput {
-  signedCredential: W3cCredential,
+  signedCredential: W3cCredential;
 }
 
 export interface W3cCredential {
-  '@context': FreeFormObject,
-  id: string,
-  type: string[],
-  holder: FreeFormObject,
-  credentialSubject: FreeFormObject,
-  issuanceDate: string,
-  issuer: string,
-  expirationDate?: string,
-  proof: W3cProof,
+  "@context": FreeFormObject;
+  id: string;
+  type: string[];
+  holder: FreeFormObject;
+  credentialSubject: FreeFormObject;
+  issuanceDate: string;
+  issuer: string;
+  expirationDate?: string;
+  proof: W3cProof;
 }
 
 export interface W3cProof {
-  type?: string,
-  created?: string,
-  verificationMethod: string,
-  proofPurpose: string,
-  jws: string,
+  type?: string;
+  created?: string;
+  verificationMethod: string;
+  proofPurpose: string;
+  jws: string;
 }
 
 export interface VerifyCredentialInput {
-  verifiableCredentials: W3cCredential[],
+  verifiableCredentials: W3cCredential[];
 }
 
 export interface SaveCredentialInput {
-  data: W3cCredential[]
+  data: W3cCredential[];
 }
 
 export interface SaveCredentialOutput {
-  credentialIds: string[]
+  credentialIds: string[];
 }
 
 export interface VerifyCredentialOutput {
-  errors: string[],
-  isValid: boolean,
+  errors: string[];
+  isValid: boolean;
 }
 
-export type GetSavedCredentialsOutput = W3cCredential[]
+export type GetSavedCredentialsOutput = W3cCredential[];

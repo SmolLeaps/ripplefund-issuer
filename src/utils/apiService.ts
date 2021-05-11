@@ -1,14 +1,15 @@
-import LOCAL_STORAGE_KEY from 'constants/localstorage';
-import {cloudWalletApi, issuerApi} from 'utils/api';
-import {endpoints} from 'constants/endpoints';
+import LOCAL_STORAGE_KEY from "constants/localstorage";
+import { cloudWalletApi, issuerApi } from "utils/api";
+import { endpoints } from "constants/endpoints";
 import {
   GetSavedCredentialsOutput,
-  SaveCredentialInput, SaveCredentialOutput,
+  SaveCredentialInput,
+  SaveCredentialOutput,
   SignCredentialInput,
   SignCredentialOutput,
   VCBuildUnsignedInput,
-  VCBuildUnsignedOutput
-} from 'utils/apis';
+  VCBuildUnsignedOutput,
+} from "utils/apis";
 
 /**
  * Static class providing useful methods for reaching different endpoints
@@ -21,8 +22,8 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/User/SignUp.
    * */
   static async signUp(username: string, password: string) {
-    const signUpParams = { username, password }
-    const {data} =  await cloudWalletApi.post(endpoints.SIGNUP, signUpParams);
+    const signUpParams = { username, password };
+    const { data } = await cloudWalletApi.post(endpoints.SIGNUP, signUpParams);
 
     return data;
   }
@@ -32,8 +33,8 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/User/Login.
    * */
   static async logIn(username: string, password: string) {
-    const loginParams = { username, password }
-    const a =  await cloudWalletApi.post(endpoints.LOGIN, loginParams)
+    const loginParams = { username, password };
+    const a = await cloudWalletApi.post(endpoints.LOGIN, loginParams);
 
     return a.data;
   }
@@ -43,7 +44,7 @@ export default class ApiService {
    * and setting authorization bearer on our axios API instance(s).
    * */
   static clientSideLogIn(accessToken: string, did: string) {
-    ApiService.storeAccessAndDidTokens(accessToken, did)
+    ApiService.storeAccessAndDidTokens(accessToken, did);
     ApiService.setAuthorizationBearer(accessToken);
   }
 
@@ -52,9 +53,9 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/User/Logout.
    * */
   static async logout() {
-    await cloudWalletApi.post(endpoints.LOGOUT)
+    await cloudWalletApi.post(endpoints.LOGOUT);
 
-    ApiService.removeAccessAndDidTokens()
+    ApiService.removeAccessAndDidTokens();
   }
 
   /**
@@ -62,7 +63,10 @@ export default class ApiService {
    * Endpoint info: https://affinity-issuer.staging.affinity-project.org/api-docs/#/VC/BuildUnsigned.
    * */
   static async issueUnsignedVC(example: VCBuildUnsignedInput) {
-    const {data} = await issuerApi.post<VCBuildUnsignedOutput>(endpoints.VC_BUILD_UNSIGNED, example);
+    const { data } = await issuerApi.post<VCBuildUnsignedOutput>(
+      endpoints.VC_BUILD_UNSIGNED,
+      example
+    );
 
     return data;
   }
@@ -72,7 +76,10 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/Wallet/SignCredential.
    * */
   static async signVC(input: SignCredentialInput) {
-    const {data} = await cloudWalletApi.post<SignCredentialOutput>(endpoints.WALLET_SIGN_CREDENTIALS, input);
+    const { data } = await cloudWalletApi.post<SignCredentialOutput>(
+      endpoints.WALLET_SIGN_CREDENTIALS,
+      input
+    );
 
     return data;
   }
@@ -82,7 +89,10 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/Wallet/StoreCredentials.
    * */
   static async storeSignedVCs(data: SaveCredentialInput) {
-    const response = await cloudWalletApi.post<SaveCredentialOutput>(endpoints.WALLET_CREDENTIALS, data)
+    const response = await cloudWalletApi.post<SaveCredentialOutput>(
+      endpoints.WALLET_CREDENTIALS,
+      data
+    );
 
     return response.data;
   }
@@ -94,7 +104,9 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/Wallet/GetCredentials.
    * */
   static async getSavedVCs() {
-    const {data} = await cloudWalletApi.get<GetSavedCredentialsOutput>(endpoints.WALLET_CREDENTIALS)
+    const { data } = await cloudWalletApi.get<GetSavedCredentialsOutput>(
+      endpoints.WALLET_CREDENTIALS
+    );
 
     return data;
   }
@@ -104,7 +116,7 @@ export default class ApiService {
    * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/Wallet/DeleteCredential.
    * */
   static async deleteStoredVC(VCId: string) {
-    await cloudWalletApi.delete(`${endpoints.WALLET_CREDENTIALS}/${VCId}`)
+    await cloudWalletApi.delete(`${endpoints.WALLET_CREDENTIALS}/${VCId}`);
   }
 
   /**
@@ -119,8 +131,8 @@ export default class ApiService {
    * Shortcut method for removing access and DID tokens from localstorage.
    * */
   static removeAccessAndDidTokens() {
-    ApiService.removeAccessTokenFromLocalStorage()
-    ApiService.removeDidTokenFromLocalStorage()
+    ApiService.removeAccessTokenFromLocalStorage();
+    ApiService.removeDidTokenFromLocalStorage();
   }
 
   /**
@@ -128,17 +140,19 @@ export default class ApiService {
    * Important for communicating with backend services.
    * */
   static setAuthorizationBearer = (accessToken: string) => {
-    cloudWalletApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-  }
+    cloudWalletApi.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+  };
 
   /**
    * Method for storing access token into localstorage.
    * */
   static saveAccessTokenToLocalStorage(accessToken: string) {
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken)
+      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, accessToken);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -147,9 +161,9 @@ export default class ApiService {
    * */
   static getAccessTokenFromLocalStorage() {
     try {
-      return localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
+      return localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -158,9 +172,9 @@ export default class ApiService {
    * */
   static removeAccessTokenFromLocalStorage() {
     try {
-      localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)
+      localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -169,9 +183,9 @@ export default class ApiService {
    * */
   static saveDidTokenToLocalStorage(did: string) {
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY.DID_TOKEN, did)
+      localStorage.setItem(LOCAL_STORAGE_KEY.DID_TOKEN, did);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -180,9 +194,9 @@ export default class ApiService {
    * */
   static getDidTokenToLocalStorage() {
     try {
-      return localStorage.getItem(LOCAL_STORAGE_KEY.DID_TOKEN)
+      return localStorage.getItem(LOCAL_STORAGE_KEY.DID_TOKEN);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
@@ -191,21 +205,27 @@ export default class ApiService {
    * */
   static removeDidTokenFromLocalStorage() {
     try {
-      localStorage.removeItem(LOCAL_STORAGE_KEY.DID_TOKEN)
+      localStorage.removeItem(LOCAL_STORAGE_KEY.DID_TOKEN);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
   /**
    * Method for showing the user a generic message when a request fails or an error has been thrown.
    * */
-  static alertWithBrowserConsole(consoleMessage: null | string | string[] = null, alertMessage?: string) {
-    if( consoleMessage ) {
+  static alertWithBrowserConsole(
+    consoleMessage: null | string | string[] = null,
+    alertMessage?: string
+  ) {
+    if (consoleMessage) {
       console.log(consoleMessage);
     }
 
-    alert(alertMessage || 'There has been an issue processing your request. Please check the browser console.')
+    alert(
+      alertMessage ||
+        "There has been an issue processing your request. Please check the browser console."
+    );
   }
 
   /**
@@ -214,7 +234,7 @@ export default class ApiService {
    * */
   static async shareCredentials(claimID: string) {
     const fullEndpoint = `${endpoints.WALLET_CREDENTIALS}/${claimID}/share`;
-    const a =  await cloudWalletApi.post(fullEndpoint)
+    const a = await cloudWalletApi.post(fullEndpoint);
 
     return a.data;
   }
