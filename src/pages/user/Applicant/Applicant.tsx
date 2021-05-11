@@ -14,7 +14,7 @@ const signUpSubComponent = (
 
 const logInSubComponent = (
     <>
-      <h1 className='title'>Reseller Login (Holder)</h1>
+      <h1 className='title'>Apply for Crowdfunding Credentials</h1>
       <p>Please log in with your Affindi Wallet credentials.</p>
       <ApplicantLogin/>
     </>

@@ -16,7 +16,8 @@ interface IBaseVCData {
     companyID: string;
     countryCode: string;
     email: string;
-    issuerOrganization: string;
+    uen: string;
+    // issuerOrganization: string;
   }
   
   const defaultBaseVCData: IBaseVCData = {
@@ -29,7 +30,8 @@ interface IBaseVCData {
     companyID: '',
     countryCode: '',
     email: '',
-    issuerOrganization: 'Pfizer'
+    uen: '',
+    // issuerOrganization: 'Pfizer'
   }
 
 interface IPayload extends IBaseVCData{
@@ -49,13 +51,13 @@ const Application: React.FC = (): React.ReactElement => {
     /**
      * Function for issuing an unsigned employment VC.
      * */
-    const issueDrugLicensePersonVC = async () => {
+    const issueCrowdfundingVC = async () => {
         try {
           const {  givenName, familyName, issueDate } = baseVCData;
 
           // Generate a random Affinidi pharmaceutical ID from a list provided from pharmacy manufacturer, which will double up as an application ID
           const applicationID: string = randomstring.generate(10);
-          const vcToStringify = {...extendVCData, affinidicompanyID: applicationID}
+          const vcToStringify = {...extendVCData, affinidiCompanyID: applicationID}
           
           const payload: IPayload = {
             givenName,
@@ -67,7 +69,7 @@ const Application: React.FC = (): React.ReactElement => {
 
           // Store unsignedVC into issuer's database. 
           const db = firebase.firestore();
-          db.collection('drug-license-waiting-approval').add({username: appState.username, payload, applicationID, approved: false})
+          db.collection('ripplefund-waiting-approval').add({username: appState.username, payload, applicationID, approved: false})
           console.log(payload);
           alert('You have successfully submitted your application. You will receive an email to your Verifiable Credential once approved by the Issuer');
         } catch (error) {
@@ -98,38 +100,42 @@ const Application: React.FC = (): React.ReactElement => {
             >Clear all fields
           </Button>
 
-          <p><strong>Get Verified to Start Listing Your Medication!</strong></p>
-          <FormGroup controlId='email'>
-            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Company Email Address:</FormLabel>
-            <FormControl name='email' type='text' value={extendVCData.email} onChange={e => updateExtendBaseVC(e)}/>
-          </FormGroup>
-
+          <p><strong>Get your startup verified to launch a crowdfunding campaign on RippleFund!</strong></p>
           <FormGroup controlId='givenName'>
             <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Registered Company Name:</FormLabel>
             <FormControl name='givenName' type='text' value={baseVCData.givenName} onChange={e => updateBaseVC(e)}/>
           </FormGroup>
 
+          <FormGroup controlId='uen'>
+            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Unique Entity Number:</FormLabel>
+            <FormControl name='uen' type='text' value={extendVCData.uen} onChange={e => updateExtendBaseVC(e)}/>
+          </FormGroup>
+
           <FormGroup controlId='issueDate'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Date of Issuance:</FormLabel>
+            <FormLabel style={{margin: '10px 0 0 0'}}>Date of Incorporation:</FormLabel>
             <FormControl name='issueDate' type='text' value={baseVCData.issueDate} onChange={e => updateBaseVC(e)}/>
           </FormGroup>
 
-          <FormGroup controlId='drugLicense'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Issued Pharmaceutical ID:</FormLabel>
-            <FormControl name='companyID' type='text' value={extendVCData.companyID} onChange={e => updateExtendBaseVC(e)}/>
+          <FormGroup controlId='email'>
+            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Company Email Address:</FormLabel>
+            <FormControl name='email' type='text' value={extendVCData.email} onChange={e => updateExtendBaseVC(e)}/>
           </FormGroup>
 
-          <FormGroup controlId='countryCode'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Country Code:</FormLabel>
-            <FormControl name='countryCode' as="select" value={extendVCData.countryCode} onChange={e => updateExtendBaseVC(e)}>
-              <option>SG</option>
-              <option>MY</option>
-              <option>ID</option>
-            </FormControl>
-          </FormGroup>
-          
+          <div style={{margin: '30px 0'}}>
+            <FormFile id="formcheck-api-regular">
+              <FormFile.Label>Upload Business Proposal (Optional)</FormFile.Label>
+              <FormFile.Input />
+            </FormFile>
+          </div>
+
+          <div style={{margin: '30px 0'}}>
+            <FormFile id="formcheck-api-regular">
+              <FormFile.Label>Upload Pitch Deck (Optional)</FormFile.Label>
+              <FormFile.Input />
+            </FormFile>
+          </div>
           <Button 
-            onClick={e => issueDrugLicensePersonVC()}
+            onClick={e => issueCrowdfundingVC()}
             >Submit
           </Button>
         </div>

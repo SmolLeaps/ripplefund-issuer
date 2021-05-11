@@ -21,9 +21,9 @@ const Issuer: React.FC = (): React.ReactElement => {
     };
 
     const fetchData = async () => {
-      const pendingApprovalData = await fetchDataHelper('drug-license-waiting-approval');
+      const pendingApprovalData = await fetchDataHelper('ripplefund-waiting-approval');
       setPendingApproval(pendingApprovalData)
-      const approvedData = await fetchDataHelper('drug-license-approved');
+      const approvedData = await fetchDataHelper('ripplefund-approved');
       console.log(approvedData);
       setApproved(approvedData)
     };

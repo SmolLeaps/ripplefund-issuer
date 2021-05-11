@@ -16,10 +16,10 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
   const [VCschemaData] = useState<any>(JSON.stringify(pharmaceuticalIdVCData));
 
   const { username, payload, applicationID, docID, approved } = props.location.state.state;
-  const { givenName, familyName, holderDid, idClass, issueDate} = payload;
+  const { givenName, familyName, holderDid, idClass, issueDate } = payload;
   
   //parsing values from stringified idClass into local vars
-  const { country, email, issuerOrganization } = JSON.parse(idClass);
+  const { country, email, issuerOrganization, uen } = JSON.parse(idClass);
 
   const history = useHistory();
 
@@ -40,7 +40,7 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
       if (isJson(VCschemaData)){
         const example = {...JSON.parse(VCschemaData)}
         example.data.givenName = givenName;
-        example.data.familyName = familyName;
+        example.data.uen = uen;
         example.data.email = email;
         example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
         example.data.hasIDDocument.hasIDDocument.idClass = idClass;
@@ -60,13 +60,13 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         // Share the credentials
         const claimID: string = credentialIds[0];
         const {qrCode, sharingUrl} = await ApiService.shareCredentials(claimID)
-        sendEmail(qrCode, sharingUrl, email)
+        sendEmail(qrCode, sharingUrl, "changcallista@gmail.com")
 
         const db = firebase.firestore();
         // Store the information under Approved Table
-        db.collection('drug-license-approved').add({ username, payload, applicationID, approved: true });
+        db.collection('ripplefund-approved').add({ username, payload, applicationID, approved: true });
         // Delete the information under the Pending Approval Table
-        db.collection('drug-license-waiting-approval').doc(docID).delete();
+        db.collection('ripplefund-waiting-approval').doc(docID).delete();
 
         alert('Application has been approved and have alerted the applicant.');
         history.push(routes.ISSUER);
@@ -81,9 +81,11 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
       <div className='tutorial__step'>
         <h3><strong>Application ID:</strong> {applicationID}</h3>
         <p><strong>Registered Company Name:</strong> {givenName}</p>
-        <p><strong>Date of Issuance:</strong> {issueDate}</p>
-        <p><strong>Issuer Organisation:</strong> {issuerOrganization}</p>
-        <p><strong>Country of Issuance:</strong> {country}</p>
+        <p><strong>UEN:</strong> {uen}</p>
+        <p><strong>Date Of Incorporation:</strong> {issueDate}</p>
+        <p><strong>Company Email Address:</strong> {email}</p>
+        <Button style={{display: 'block', margin: '10px 0 0 0'}}>View Business Proposal</Button>
+        <Button style={{display: 'block', margin: '10px 0 0 0'}}>View Pitch Deck</Button>
         { !approved ? (
           <>
            <Button style={{display: 'block', margin: '10px 0 0 0'}} onClick={approveVC}>Approve</Button>
