@@ -1,7 +1,7 @@
 import React from 'react';
 import 'pages/intro/Intro.scss'
 import EntireFlow from 'assets/images/icons/user-flow.png';
-import NewsArticles from 'assets/images/icons/news-pharma-fakes.png';
+// import NewsArticles from 'assets/images/icons/news-pharma-fakes.png';
 import {routes} from 'constants/routes';
 
 /**
@@ -25,7 +25,7 @@ const IntroPage = () => {
         <p>The ongoing COVID-19 pandemic and the fast-paced world of e-commerce has taken the acceleration of selling pharmaceuticals online to the next level.</p>
         <p>Though 60% of pharmaceutical brands have seen an increase of revenue from their online business, they have suffered an increase of 67% in online counterfeits as a result as well. WHO estimates that counterfeit medicines worth 89 billion are traded annually.</p> 
         <p>Multiple news articles have been published about the increasingly prevalent issue:</p>
-        <img className='articles-size' src={NewsArticles} alt='entire-flow' />
+        {/* <img className='articles-size' src={NewsArticles} alt='entire-flow' /> */}
       </div>
       <div className='intro__text-block'>
         <h4>Pharma's League's Mission</h4>

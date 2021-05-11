@@ -26,7 +26,7 @@ export const sendEmail = (qrCode: string, sharingUrl: string, receiver_email: st
     ses_mail = ses_mail + "<html>\n\n";
     ses_mail = ses_mail + "<body>\n\n";
     ses_mail = ses_mail + "<h2>Your application for verifiable credentials has been approved.</h2>\n\n";
-    ses_mail = ses_mail + "<p>You may npw retrieve and store your verifiable credentials through the link below!</p>\n\n";
+    ses_mail = ses_mail + "<p>You may now retrieve and store your verifiable credentials through the link below!</p>\n\n";
     ses_mail = ses_mail + "<p>Link: <a href='" + redirectUrl + "'>Here</a></p>\n\n";
     ses_mail = ses_mail + "</body>\n\n";
     ses_mail = ses_mail + "</html>\n\n";
