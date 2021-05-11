@@ -26,6 +26,7 @@ const LayoutHeaderNavigation = () => {
             onToggle={() => setShowNavbar(!showNavbar)}
             expanded={false}
             className='bg-orange'
+            variant="dark"
     >
       <Container>
         <NavbarBrand>
@@ -54,10 +55,10 @@ const LayoutHeaderNavigation = () => {
             {!appState.isAuthenticated && (
               <>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.APPLICANT_LOGIN}>Login as Reseller</Nav.Link>
+                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.APPLICANT_LOGIN}>Register for Crowdfunding Credentials</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.ISSUER_LOGIN}>Login as Pharma Company</Nav.Link>
+                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.ISSUER_LOGIN}>Login as Admin</Nav.Link>
                 </Nav.Item>
                 {/* <Nav.Item>
                   <Nav.Link as={NavLink} activeClassName='is-active' to={routes.API_KEY}>API Key</Nav.Link>
